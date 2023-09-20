@@ -6,7 +6,7 @@ export async function canvasPreview(
   image: HTMLImageElement,
   canvas: HTMLCanvasElement,
   crop: PixelCrop,
-  scale = 1,
+  scale:any,
   rotate = 0,
 ) {
   const ctx = canvas.getContext('2d')

@@ -380,6 +380,7 @@ const jsonObject = {
 const jsonArray = jsonObject.objects;
 const arrayConvt=jsonArray[0]?.objects;
 
+
 function countElementOccurrences(elements) {
   const counts = {};
   elements.forEach((element) => {
@@ -398,10 +399,16 @@ export default function App() {
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
   const [matchingElement, setMatchingElement] = useState<any>(null);
+  const [crushValue, setCrushValue] = useState<any>("");
+  const [cementValue, setCementValue] = useState<any>("");
+  const [crush2Value, setCrush2Value] = useState<any>("");
+
+
 
   const onSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
-      setCrop(undefined); // Makes crop preview update between images.
+      setCrop(undefined);
+      setScale(1);
       const reader = new FileReader();
       reader.addEventListener('load', () =>
         setImgSrc(reader.result?.toString() || '')
@@ -413,22 +420,31 @@ export default function App() {
   const onImageLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
     if (completedCrop) {
       const { width, height } = e.currentTarget;
-      setCrop(convertToPixelCrop(completedCrop, width, height));
+      const pixelCrop = convertToPixelCrop(completedCrop, width / scale, height / scale);
+      setCrop(pixelCrop);
     }
   };
 
   const cropCoord = (coord: any) => {
     setCompletedCrop(coord);
-
+  
+    const scaledWidth = Math.floor(coord.width * scale);
+    const scaledHeight = Math.floor(coord.height * scale);
+  
+    const rotatedX1 = coord.x * scale * Math.cos((rotate * Math.PI) / 180) - coord.y * scale * Math.sin((rotate * Math.PI) / 180);
+    const rotatedY1 = coord.x * scale * Math.sin((rotate * Math.PI) / 180) + coord.y * scale * Math.cos((rotate * Math.PI) / 180);
+  
+    const rotatedX2 = rotatedX1 + scaledWidth;
+    const rotatedY2 = rotatedY1 + scaledHeight;
+  
     const pointObj = {
-      x1: Math.floor(coord.x) * scale,
-      y1: Math.floor(coord.y) * scale,
-      x2: Math.floor((coord.x + coord.width) * scale),
-      y2: Math.floor((coord.y + coord.height) * scale),
+      x1: Math.floor(rotatedX1),
+      y1: Math.floor(rotatedY1),
+      x2: Math.floor(rotatedX2),
+      y2: Math.floor(rotatedY2),
     };
-
+  
     const foundElements = arrayConvt.filter((element) => {
-      // Check if the element intersects with the cropping rectangle
       return (
         pointObj.x1 <= element.x2 &&
         pointObj.x2 >= element.x1 &&
@@ -436,15 +452,15 @@ export default function App() {
         pointObj.y2 >= element.y1
       );
     });
-
+  
     if (foundElements.length > 0) {
-      console.log('found::', foundElements);
       setMatchingElement(foundElements);
     } else {
-      console.log('not found');
       setMatchingElement(null);
     }
   };
+  
+  
 
   const showImg = () => {
     if (
@@ -463,29 +479,53 @@ export default function App() {
     }
   };
 
+  const handleZoomIn = () => {
+    setScale(scale + 0.1);
+  };
+
+  const handleZoomOut = () => {
+    if (scale > 0.1) {
+      setScale(scale - 0.1);
+    }
+  };
+
+
+  const handleCrush=(e:any)=>{
+    setCrushValue(e.target.value)
+  }
+  const handleCement=(e:any)=>{
+    setCementValue(e.target.value)
+  }
+  
+  const handleCrush2=(e:any)=>{
+    setCrush2Value(e.target.value)
+  }
+  
   return (
     <div className="container" style={{ marginTop: 100, marginBottom: 100 }}>
       <div className="Crop-Controls">
-        <form className="form-group form_pdf">
+        <div className="form-group form_pdf">
           <input
             type="file"
             accept="image/*"
             onChange={onSelectFile}
             className="file_inpt"
           />
-          <div>
-            <label htmlFor="scale-input">Zoom: </label>
-            <input
-              id="scale-input"
-              type="number"
-              step="0.1"
-              value={scale}
-              disabled={!imgSrc}
-              onChange={(e) => setScale(Number(e.target.value))}
-            />
-          </div>
-        </form>
+          <button onClick={handleZoomIn}>Zoom In</button>
+          <button onClick={handleZoomOut}>Zoom Out</button>
+        </div>
       </div>
+
+       {/* take input from user  */}
+
+       <div className='input_fldsBox'>
+           <input type="number" placeholder='crush' onChange={handleCrush} value={crushValue} />
+           <input type="number" placeholder='cement' onChange={handleCement} value={cementValue} />
+           <input type="number" placeholder='crush2' onChange={handleCrush2} value={crush2Value} />
+
+       </div>
+
+
       <h2 style={{ marginTop: 50, marginBottom: 50, textAlign: 'center' }}>
         View Image
       </h2>
@@ -499,7 +539,11 @@ export default function App() {
             ref={imgRef}
             alt="Crop me"
             src={imgSrc}
-            style={{ transform: `scale(${scale}) rotate(${rotate}deg)` }}
+            style={{
+              transform: `scale(${scale}) rotate(${rotate}deg)`,
+              maxWidth: '100%',
+              maxHeight: '100%',
+            }}
             onLoad={onImageLoad}
           />
         </ReactCrop>
@@ -548,7 +592,7 @@ export default function App() {
                   Matching Elements and Quantities
                 </h2>
                 {Object.entries(countElementOccurrences(matchingElement)).map(
-                  ([value, count]:any) => (
+                  ([value, count]: any) => (
                     <div key={value}>
                       <span style={{ fontWeight: 'bold', marginRight: '8px' }}>
                         {value}:
