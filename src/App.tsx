@@ -396,7 +396,7 @@ export default function App() {
   const [imgSrc, setImgSrc] = useState('');
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
-  const [crop, setCrop] = useState<Crop>();
+  const [crop, setCrop] = useState<any>();
   const [completedCrop, setCompletedCrop] = useState<any>(null);
   const [scale, setScale] = useState(1);
   const [rotate, setRotate] = useState(0);
@@ -524,6 +524,11 @@ export default function App() {
   }
 
 
+  const resetCrop=()=>{
+    setCompletedCrop(null)
+    setCrop(null)
+  }
+
 
   return (
     <div className="container" style={{ marginTop: 100, marginBottom: 100 }}>
@@ -602,6 +607,11 @@ export default function App() {
                   )}
                 </h1>
               </>
+            </div>
+
+
+            <div>
+              <button className='rset_btn' onClick={resetCrop}>Reset Cropping</button>
             </div>
 
             {!!matchingElement && (
