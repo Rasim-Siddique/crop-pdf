@@ -381,16 +381,16 @@ const jsonArray = jsonObject.objects;
 const arrayConvt = jsonArray[0]?.objects;
 
 
-function countElementOccurrences(elements) {
-  const counts = {};
-  elements?.forEach((element) => {
-    const { value } = element;
-    counts[value] = (counts[value] || 0) + 1; 
-  });
-  return counts;
-}
+// function countElementOccurrences(elements) {
+//   const counts = {};
+//   elements?.forEach((element) => {
+//     const { value } = element;
+//     counts[value] = (counts[value] || 0) + 1; 
+//   });
+//   return counts;
+// }
 
- 
+
 
 export default function App() {
   const [imgSrc, setImgSrc] = useState('');
@@ -458,7 +458,13 @@ export default function App() {
     });
 
     if (foundElements.length > 0) {
-      setMatchingElement(foundElements);
+      const counts = {};
+      foundElements?.forEach((element) => {
+        const { value } = element;
+        counts[value] = (counts[value] || 0) + 1;
+      });
+      const arrGot = Object.entries(counts);
+      setMatchingElement(arrGot);
     } else {
       setMatchingElement(null);
     }
@@ -505,14 +511,19 @@ export default function App() {
     setCrush2Value(e.target.value)
   }
 
-//  const handleCount=(e)=>{
-//   setMatchingElement((prevCountValues) => ({
-//     const { count}=prevCountValues
-//     ...prevCountValues,
-//     elementType: value,
-//   }));
+  const handleCount = (e: any, id: any) => {
+    console.log(matchingElement);
+    const updatedMatchingElement = matchingElement.map(([value, count], index) => {
+      if (id === index) {
+        return [value, parseInt(e.target.value, 10)];
+      }
+      return [value, count];
+    });
 
-    
+    setMatchingElement(updatedMatchingElement);
+  }
+
+
 
   return (
     <div className="container" style={{ marginTop: 100, marginBottom: 100 }}>
@@ -604,38 +615,66 @@ export default function App() {
                 >
                   Matching Elements and Quantities
                 </h2>
-                {Object.entries(countElementOccurrences(matchingElement)).map(
-                  ([value, count]: any) => (
-                    <div key={value} style={{ display: "flex", gap: 10 }}>
-                      <span style={{ fontWeight: 'bold', marginRight: '8px' }}>
+                {matchingElement?.map(
+                  ([value, count], id: any) => (
+                    <div key={value} style={{ display: "flex", gap: 10, margin:20 }}>
+                      <span style={{ fontWeight: 'bold', marginTop:10 }}>
                         {value}:
                       </span>
 
-        <input type="number" value={count} onChange={(e)=>{
-        }} />
-
-                      {/* <span>{count}</span> */}
-
-                      <span style={{ fontWeight: "bold" }}>Total cubic feet= {value === 'c1' && count * 1.5 || value === 'c2' && count * 1.5 ||
-                        value === 'c3' && count * 1.25 || value === 'c3' && count * 1.25 || value === 'f1' && count * 60
-                        || value === 'f2' && count * 72 || value === 'cf1' && count * 106.75 || value === 'cf2' && count * 450
-                        || value === 'cf3' && count * 500
-                      }</span>
+                      <input
+                          className='count_input'
+                      
+                       type="number" value={count} onChange={(e) => { handleCount(e, id) }} />
 
 
 
-                      <span style={{ fontWeight: "bold" }}>Total concrete Price for cubic feet: D = {
-                        value === 'c1' && count * 1.5 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'c2' && count * 1.5 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50)
-                        || value === 'c3' && count * 1.25 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'f1' && count * 60 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'f2' && count * 72 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf1' && count * 106.75 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf2' && count * 450 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf3' && count * 500 *
-                        (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50)
-                      }</span>
+                      <span style={{ fontWeight: "bold",  }}>
+                        Total cubic feet:
+
+                        <input
+                          type="number"
+                          className='count_input'
+                          value={value === 'c1' ? count * 1.5 :
+                            value === 'c2' ? count * 1.5 :
+                              value === 'c3' ? count * 1.25 :
+                                value === 'c4' ? count * 1.25 :
+                                  value === 'f1' ? count * 60 :
+                                    value === 'f2' ? count * 72 :
+                                      value === 'cf1' ? count * 106.75 :
+                                        value === 'cf2' ? count * 450 :
+                                          value === 'cf3' ? count * 500 :
+                                            0
+                          }
+                          disabled
+                        />
+                      </span>
+
+
+
+
+                      <span style={{ fontWeight: "bold" }}>Total concrete Price for cubic feet: D =
+
+                        <input
+                          type="number"
+                          className='count_input'
+
+                          value={
+                            (value === 'c1' ? count * 1.5 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                              value === 'c2' ? count * 1.5 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                value === 'c3' ? count * 1.25 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                  value === 'c4' ? count * 1.25 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                    value === 'f1' ? count * 60 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                      value === 'f2' ? count * 72 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                        value === 'cf1' ? count * 106.75 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                          value === 'cf2' ? count * 450 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                            value === 'cf3' ? count * 500 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                              0
+                            )
+                          }
+disabled
+/>
+                      </span>
                     </div>
                   )
                 )}
@@ -656,7 +695,7 @@ export default function App() {
               </tr>
 
               {
-                Object.entries(countElementOccurrences(matchingElement)).map(([value, count]: any) => {
+                matchingElement?.map(([value, count]: any) => {
                   return (
                     <>
                       <tr>

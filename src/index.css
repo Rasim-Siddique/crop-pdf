@@ -53,3 +53,10 @@
     height: 40px;
     text-indent: 20px;
   }
+
+  .count_input
+  {
+  width: 100px;
+  height: 40px;
+  margin-left: 20px;
+  }
