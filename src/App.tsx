@@ -380,18 +380,6 @@ const jsonObject = {
 const jsonArray = jsonObject.objects;
 const arrayConvt = jsonArray[0]?.objects;
 
-
-// function countElementOccurrences(elements) {
-//   const counts = {};
-//   elements?.forEach((element) => {
-//     const { value } = element;
-//     counts[value] = (counts[value] || 0) + 1; 
-//   });
-//   return counts;
-// }
-
-
-
 export default function App() {
   const [imgSrc, setImgSrc] = useState('');
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -405,6 +393,8 @@ export default function App() {
   const [cementValue, setCementValue] = useState<any>("");
   const [crush2Value, setCrush2Value] = useState<any>("");
   const [countValue, setCountValue] = useState<any>("");
+  const [isCroppingEnabled, setIsCroppingEnabled] = useState(false);
+
 
 
 
@@ -494,6 +484,7 @@ export default function App() {
   };
 
   const handleZoomOut = () => {
+
     if (scale > 0.1) {
       setScale(scale - 0.1);
     }
@@ -529,6 +520,10 @@ export default function App() {
     setCrop(null)
   }
 
+  const toggleCropping = () => {
+    setIsCroppingEnabled((prev) => !prev);
+  };
+
 
   return (
     <div className="container" style={{ marginTop: 100, marginBottom: 100 }}>
@@ -540,8 +535,10 @@ export default function App() {
             onChange={onSelectFile}
             className="file_inpt"
           />
-          <button onClick={handleZoomIn}>Zoom In</button>
-          <button onClick={handleZoomOut}>Zoom Out</button>
+         <button onClick={toggleCropping} style={{cursor:'pointer', padding:10}} >{isCroppingEnabled?"Disable Cropping":"Enable Cropping"}</button>
+
+          <button onClick={handleZoomIn} style={{cursor:'pointer', padding:10}} >Zoom In</button>
+          <button onClick={handleZoomOut} style={{cursor:'pointer', padding:10}} >Zoom Out</button>
         </div>
       </div>
 
@@ -560,7 +557,7 @@ export default function App() {
       </h2>
       {!!imgSrc && (
         <ReactCrop
-          crop={crop}
+          crop={isCroppingEnabled?crop:""}
           onChange={(_, percentCrop) => setCrop(percentCrop)}
           onComplete={(c) => cropCoord(c)}
         >
