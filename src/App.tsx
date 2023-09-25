@@ -536,6 +536,7 @@ export default function App() {
             className="file_inpt"
           />
          <button onClick={toggleCropping} style={{cursor:'pointer', padding:10}} >{isCroppingEnabled?"Disable Cropping":"Enable Cropping"}</button>
+         {/* <button  style={{cursor:'pointer', padding:10}} >Hand Scrolling</button> */}
 
           <button onClick={handleZoomIn} style={{cursor:'pointer', padding:10}} >Zoom In</button>
           <button onClick={handleZoomOut} style={{cursor:'pointer', padding:10}} >Zoom Out</button>
@@ -574,169 +575,51 @@ export default function App() {
           />
         </ReactCrop>
       )}
+
+      {completedCrop  && crop &&
       <div
-        style={{
-          display: 'flex',
-          marginTop: 50,
-          justifyContent: 'center',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 30,
-        }}
-      >
-        {!!completedCrop && (
+      style={{
+        display: 'flex',
+        marginTop: 50,
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: 30,
+      }}
+    >
+      {!!completedCrop && (
+        <>
+        {matchingElement &&
+          <div>
           <>
-            <div>
-              <>
-                <h1>width {Math.floor(completedCrop?.width)}</h1>
-                <h1>height {Math.floor(completedCrop?.height)}</h1>
+            <h1>width {Math.floor(completedCrop?.width)}</h1>
+            <h1>height {Math.floor(completedCrop?.height)}</h1>
 
-                <h1>Start X: {Math.floor(completedCrop?.x * scale)}</h1>
-                <h1>Start Y: {Math.floor(completedCrop?.y * scale)}</h1>
-                <h1>
-                  End X:{' '}
-                  {Math.floor((completedCrop?.x + completedCrop.width) * scale)}
-                </h1>
-                <h1>
-                  End Y:{' '}
-                  {Math.floor(
-                    (completedCrop?.y + completedCrop.height) * scale
-                  )}
-                </h1>
-              </>
-            </div>
+            <h1>Start X: {Math.floor(completedCrop?.x)}</h1>
+            <h1>Start Y: {Math.floor(completedCrop?.y)}</h1>
+            <h1>
+              End X:{' '}
+              {Math.floor((completedCrop?.x + completedCrop.width) * scale)}
+            </h1>
+            <h1>
+              End Y:{' '}
+              {Math.floor(
+                (completedCrop?.y + completedCrop.height) * scale
+              )}
+            </h1>
+          </>
+        </div>
+        }
+        
 
+    {matchingElement &&
+          <div>
+          <button className='rset_btn' onClick={resetCrop}>Reset Cropping</button>
+          </div>
+     
+    }
 
-            <div>
-              <button className='rset_btn' onClick={resetCrop}>Reset Cropping</button>
-            </div>
-
-            {!!matchingElement && (
-              <div>
-                <h2
-                  style={{
-                    marginTop: 50,
-                    marginBottom: 50,
-                    textAlign: 'center',
-                  }}
-                >
-                  Matching Elements and Quantities
-                </h2>
-                {matchingElement?.map(
-                  ([value, count], id: any) => (
-                    <div key={value} style={{ display: "flex", gap: 10, margin:20 }}>
-                      <span style={{ fontWeight: 'bold', marginTop:10 }}>
-                        {value}:
-                      </span>
-
-                      <input
-                          className='count_input'
-                      
-                       type="number" value={count} onChange={(e) => { handleCount(e, id) }} />
-
-
-
-                      <span style={{ fontWeight: "bold",  }}>
-                        Total cubic feet:
-
-                        <input
-                          type="number"
-                          className='count_input'
-                          value={value === 'c1' ? count * 1.5 :
-                            value === 'c2' ? count * 1.5 :
-                              value === 'c3' ? count * 1.25 :
-                                value === 'c4' ? count * 1.25 :
-                                  value === 'f1' ? count * 60 :
-                                    value === 'f2' ? count * 72 :
-                                      value === 'cf1' ? count * 106.75 :
-                                        value === 'cf2' ? count * 450 :
-                                          value === 'cf3' ? count * 500 :
-                                            0
-                          }
-                          disabled
-                        />
-                      </span>
-
-
-
-
-                      <span style={{ fontWeight: "bold" }}>Total concrete Price for cubic feet: D =
-
-                        <input
-                          type="number"
-                          className='count_input'
-
-                          value={
-                            (value === 'c1' ? count * 1.5 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                              value === 'c2' ? count * 1.5 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                value === 'c3' ? count * 1.25 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                  value === 'c4' ? count * 1.25 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                    value === 'f1' ? count * 60 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                      value === 'f2' ? count * 72 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                        value === 'cf1' ? count * 106.75 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                          value === 'cf2' ? count * 450 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                            value === 'cf3' ? count * 500 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
-                                              0
-                            )
-                          }
-disabled
-/>
-                      </span>
-                    </div>
-                  )
-                )}
-              </div>
-            )}
-
-            <table border={2}>
-              <tr>
-                <th>
-                  Name
-                </th>
-                <th>
-                  Total  cubic feet
-                </th>
-                <th>
-                  Total  Concreate Price For Cubic feet
-                </th>
-              </tr>
-
-              {
-                matchingElement?.map(([value, count]: any) => {
-                  return (
-                    <>
-                      <tr>
-                        <td>{value}</td>
-                        <td>{value === 'c1' && count * 1.5 || value === 'c2' && count * 1.5 ||
-                          value === 'c3' && count * 1.25 || value === 'c3' && count * 1.25 || value === 'f1' && count * 60
-                          || value === 'f2' && count * 72 || value === 'cf1' && count * 106.75 || value === 'cf2' && count * 450
-                          || value === 'cf3' && count * 500
-                        }</td>
-
-                        <td>
-                          {
-                            value === 'c1' && count * 1.5 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'c2' && count * 1.5 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50)
-                            || value === 'c3' && count * 1.25 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'f1' && count * 60 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'f2' && count * 72 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf1' && count * 106.75 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf2' && count * 450 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf3' && count * 500 *
-                            (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50)
-                          }
-                        </td>
-                      </tr>
-                    </>
-                  )
-                })
-
-              }
-            </table>
-
-            <button onClick={showImg}>Show Cropped Image</button>
-
+          {!!matchingElement && (
             <div>
               <h2
                 style={{
@@ -745,21 +628,160 @@ disabled
                   textAlign: 'center',
                 }}
               >
-                View Cropped Image
+                Matching Elements and Quantities
               </h2>
+              {matchingElement?.map(
+                ([value, count], id: any) => (
+                  <div key={value} style={{ display: "flex", gap: 10, margin:20 }}>
+                    <span style={{ fontWeight: 'bold', marginTop:10 }}>
+                      {value}:
+                    </span>
 
-              <canvas
-                ref={previewCanvasRef}
-                style={{
-                  border: '1px solid black',
-                  width: 600,
-                  height: 600,
-                }}
-              />
+                    <input
+                        className='count_input'
+                    
+                     type="number" value={count} onChange={(e) => { handleCount(e, id) }} />
+
+
+
+                    <span style={{ fontWeight: "bold",  }}>
+                      Total cubic feet:
+
+                      <input
+                        type="number"
+                        className='count_input'
+                        value={value === 'c1' ? count * 1.5 :
+                          value === 'c2' ? count * 1.5 :
+                            value === 'c3' ? count * 1.25 :
+                              value === 'c4' ? count * 1.25 :
+                                value === 'f1' ? count * 60 :
+                                  value === 'f2' ? count * 72 :
+                                    value === 'cf1' ? count * 106.75 :
+                                      value === 'cf2' ? count * 450 :
+                                        value === 'cf3' ? count * 500 :
+                                          0
+                        }
+                        disabled
+                      />
+                    </span>
+
+
+
+
+                    <span style={{ fontWeight: "bold" }}>Total concrete Price for cubic feet: D =
+
+                      <input
+                        type="number"
+                        className='count_input'
+
+                        value={
+                          (value === 'c1' ? count * 1.5 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                            value === 'c2' ? count * 1.5 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                              value === 'c3' ? count * 1.25 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                value === 'c4' ? count * 1.25 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                  value === 'f1' ? count * 60 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                    value === 'f2' ? count * 72 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                      value === 'cf1' ? count * 106.75 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                        value === 'cf2' ? count * 450 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                          value === 'cf3' ? count * 500 * (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) :
+                                            0
+                          )
+                        }
+disabled
+/>
+                    </span>
+                  </div>
+                )
+              )}
             </div>
-          </>
-        )}
-      </div>
+          )}
+
+
+
+         {matchingElement &&
+         <table border={2}>
+
+         <tr>
+           <th>
+             Name
+           </th>
+           <th>
+             Total  cubic feet
+           </th>
+           <th>
+             Total  Concreate Price For Cubic feet
+           </th>
+         </tr>
+
+         {
+           matchingElement?.map(([value, count]: any) => {
+             return (
+               <>
+                 <tr>
+                   <td>{value}</td>
+                   <td>{value === 'c1' && count * 1.5 || value === 'c2' && count * 1.5 ||
+                     value === 'c3' && count * 1.25 || value === 'c3' && count * 1.25 || value === 'f1' && count * 60
+                     || value === 'f2' && count * 72 || value === 'cf1' && count * 106.75 || value === 'cf2' && count * 450
+                     || value === 'cf3' && count * 500
+                   }</td>
+
+                   <td>
+                     {
+                       value === 'c1' && count * 1.5 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'c2' && count * 1.5 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50)
+                       || value === 'c3' && count * 1.25 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'f1' && count * 60 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'f2' && count * 72 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf1' && count * 106.75 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf2' && count * 450 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) || value === 'cf3' && count * 500 *
+                       (2 * crushValue + 8 * cementValue + 16 * crush2Value / 50)
+                     }
+                   </td>
+                 </tr>
+               </>
+             )
+           })
+
+         }
+       </table>
+         } 
+          
+
+          {matchingElement &&
+          <>
+                    <button onClick={showImg}>Show Cropped Image</button>
+
+                    <div>
+                      <h2
+                        style={{
+                          marginTop: 50,
+                          marginBottom: 50,
+                          textAlign: 'center',
+                        }}
+                      >
+                        View Cropped Image
+                      </h2>
+          
+                      <canvas
+                        ref={previewCanvasRef}
+                        style={{
+                          border: '1px solid black',
+                          width: 600,
+                          height: 600,
+                        }}
+                      />
+                    </div>
+                    </>
+          }
+
+
+        </>
+      )}
+    </div>
+      }
+      
     </div>
   );
 }
