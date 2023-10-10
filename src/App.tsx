@@ -3,6 +3,7 @@ import ReactCrop, { Crop, convertToPixelCrop } from 'react-image-crop';
 import { canvasPreview } from './canvasPreview';
 
 import 'react-image-crop/dist/ReactCrop.css';
+import Navbar from './components/Navbar';
 
 const jsonObject = {
   "objects": [
@@ -526,6 +527,8 @@ export default function App() {
 
 
   return (
+    <>
+    <Navbar />
     <div className="container" style={{ marginTop: 100, marginBottom: 100 }}>
       <div className="Crop-Controls">
         <div className="form-group form_pdf">
@@ -550,7 +553,7 @@ export default function App() {
         <input type="number" placeholder='price of one bag of crush' onChange={handleCement} value={cementValue} />
         <input type="number" placeholder='price of one bag of course aggregator' onChange={handleCrush2} value={crush2Value} />
 
-      </div>
+      </div>r
 
 
       <h2 style={{ marginTop: 50, marginBottom: 50, textAlign: 'center' }}>
@@ -783,5 +786,6 @@ disabled
       }
       
     </div>
+    </>
   );
 }
