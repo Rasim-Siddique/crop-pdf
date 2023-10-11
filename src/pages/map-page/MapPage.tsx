@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
 import ReactCrop, { Crop, convertToPixelCrop } from 'react-image-crop';
-import { canvasPreview } from './canvasPreview';
+import { canvasPreview } from '../../canvasPreview';
 
 import 'react-image-crop/dist/ReactCrop.css';
-import Navbar from './components/Navbar';
 
 const jsonObject = {
   "objects": [
@@ -381,7 +380,7 @@ const jsonObject = {
 const jsonArray = jsonObject.objects;
 const arrayConvt = jsonArray[0]?.objects;
 
-export default function App() {
+export default function MapPage() {
   const [imgSrc, setImgSrc] = useState('');
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -528,7 +527,6 @@ export default function App() {
 
   return (
     <>
-    <Navbar />
     <div className="container" style={{ marginTop: 100, marginBottom: 100 }}>
       <div className="Crop-Controls">
         <div className="form-group form_pdf">
