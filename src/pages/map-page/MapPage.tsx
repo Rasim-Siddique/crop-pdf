@@ -504,7 +504,7 @@ export default function MapPage() {
     setCrush2Value(e.target.value)
   }
 
-  const handleLaboutPer=(e:any)=>{
+  const handleLaboutPer = (e: any) => {
     setLabourPer(e.target.value)
   }
 
@@ -530,48 +530,55 @@ export default function MapPage() {
     setIsCroppingEnabled((prev) => !prev);
   };
 
-  const findTotalCubicFeet=()=>{
+  const findTotalCubicFeet = () => {
 
-    const totalCubicFeet=matchingElement?.map(([values, quantity])=>{
-      if(values==='c1'){
-      return quantity*1.5
-      }else if(values==='c2'){
-        return quantity*1.5;
+    const totalCubicFeet = matchingElement?.map(([values, quantity]) => {
+      if (values === 'c1') {
+        return quantity * 1.5
+      } else if (values === 'c2') {
+        return quantity * 1.5;
       }
-      else if(values==='c3'){
-        return quantity*1.25;
+      else if (values === 'c3') {
+        return quantity * 1.25;
       }
-      else if(values==='c4'){
-        return quantity*1.25;
+      else if (values === 'c4') {
+        return quantity * 1.25;
       }
-      else if(values==='f1'){
-        return quantity*60;
+      else if (values === 'f1') {
+        return quantity * 60;
       }
-      else if(values==='f2'){
-        return quantity*72;
+      else if (values === 'f2') {
+        return quantity * 72;
       }
-      else if(values==='cf1'){
-        return quantity*106.75;
+      else if (values === 'cf1') {
+        return quantity * 106.75;
       }
-      else if(values==='cf2'){
-        return quantity*450
+      else if (values === 'cf2') {
+        return quantity * 450
       }
-      else if(values==='cf3'){
-        return quantity*500
+      else if (values === 'cf3') {
+        return quantity * 500
       }
-      else{
+      else {
         return 0;
       }
-      
+
     })
 
-    const total = totalCubicFeet && totalCubicFeet.reduce((acc:any, value:any) => acc+ value, 0);
+    const total = totalCubicFeet && totalCubicFeet.reduce((acc: any, value: any) => acc + value, 0);
 
-    return total * labourPer;
+    return total;
 
   }
-  const totalCubicFeet=findTotalCubicFeet();
+  const totalCubicFeet = findTotalCubicFeet();
   console.log("Total Cubic Feet:", totalCubicFeet);
+
+
+  const findConcreate = () => {
+    //  now find price of 1 cubic feet concrete
+    // let priceOfCubicFeet:any='';
+    // priceOfCubicFeet=(2a+8b+16c)/50`
+  }
 
 
   return (
@@ -789,23 +796,27 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>
+
+                        {totalCubicFeet}
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>
 
-</td>
-<td>done
+                        {labourPer}
 
-</td>
+                      </td>
+                      <td>1
 
-<td>
-  {totalCubicFeet}
+                      </td>
 
-</td>
+                      <td>
+                        {totalCubicFeet * labourPer}
+
+                      </td>
 
 
 
@@ -817,22 +828,22 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
@@ -845,7 +856,10 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>
+
+                        {totalCubicFeet}
+
 
                       </td>
                       <td>cubic feet
@@ -853,14 +867,16 @@ export default function MapPage() {
                       </td>
                       <td>done
 
-</td>
-<td>done
+                      </td>
+                      <td>done
 
-</td>
+                      </td>
 
-<td>done
+                      <td>
 
-</td>
+                        {(2 * crushValue + 8 * cementValue + 16 * crush2Value / 50) * totalCubicFeet}
+
+                      </td>
 
 
 
@@ -871,22 +887,22 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
@@ -898,22 +914,22 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
@@ -925,22 +941,22 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
@@ -952,22 +968,22 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
@@ -980,22 +996,22 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
@@ -1008,22 +1024,22 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
@@ -1035,27 +1051,27 @@ export default function MapPage() {
 
                       </td>
 
-                      <td>done
+                      <td>1
 
                       </td>
                       <td>cubic feet
 
                       </td>
-                      <td>done
+                      <td>1
 
-</td>
-<td>done
+                      </td>
+                      <td>1
 
-</td>
+                      </td>
 
-<td>done
+                      <td>1
 
-</td>
+                      </td>
 
 
 
                     </tr>
-                    
+
                   </table>
                 }
 
